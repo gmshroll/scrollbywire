@@ -1,4 +1,5 @@
 (function scrollbywire(){
+	var touchbool = false;	
 	var tickCallbacks = [];
 	var docLoaded = setInterval(function () {
 		if(document.readyState === "complete") {
@@ -14,10 +15,9 @@
 			} else { 
 				document.getElementById(wrapperElementID).style.overflow = "hidden";
 				document.getElementById(wrapperElementID).style.position = "fixed";
-				document.getElementById(wrapperElementID).style.left = "0px";
+				document.getElementById(wrapperElementID).style.width = "100%";
 				document.getElementById(wrapperElementID).style.top = "0px";
 				document.getElementById(wrapperElementID).style.bottom = "0px";
-				document.getElementById(wrapperElementID).style.right = "0px";
 			}
 			
 			var divScrollbywire = document.getElementById(wrapperElementID);
@@ -28,7 +28,11 @@
 				
 				// set height of body to match scrollbywire wrapper
 				var h = divScrollbywire.scrollHeight;
-				bodyelem.style.height = h + "px";
+				if (touchbool == false){
+					bodyelem.style.height = h + "px";
+				} else {
+					bodyelem.style.height = "auto";
+				}
 				
 				// determine distance from required position
 				var bodyX = (document.documentElement && document.documentElement.scrollLeft) || document.body.scrollLeft;
@@ -62,4 +66,27 @@
 	window.scrollbywire_addCallback = function(callback){
 		tickCallbacks.push(callback);
 	}
+	
+	var saddEventListener = function(obj, evt, fnc) {
+		if (obj.addEventListener) {
+			obj.addEventListener(evt, fnc, false);
+			return true;
+		} 
+		else if (obj.attachEvent) {
+			return obj.attachEvent('on' + evt, fnc);
+		}	
+	}
+		
+	// switch off scrollbywire on touchstart (ios fix)
+	var body = document.body || document.documentElement;
+	saddEventListener(body,'touchstart', function(event) {
+		var wrapperElementID = "scrollbywire";
+		document.getElementById(wrapperElementID).style.overflow = "auto";
+		document.getElementById(wrapperElementID).style.position = "relative";
+		document.getElementById(wrapperElementID).style.width = "auto";
+		document.getElementById(wrapperElementID).style.top = "auto";
+		document.getElementById(wrapperElementID).style.bottom = "auto";
+		touchbool = true;
+	}, false); 
+	
 }());
