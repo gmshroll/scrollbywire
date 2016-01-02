@@ -3,10 +3,10 @@ Smooth scroll web pages by disconnecting user input from scroll position - with 
 
 Scrollbywire.js works by taking the user's 'scroll request', whether mouse wheel, touchstart or scrollbar and keeping this disconnected from the actual scroll position of the page (in both axes). The requested position is then eased towards to give a smooth scroll effect. 
 
-You can receive tick callbacks by calling ```scrollbywire.addCallback(callback);``` e.g.
+You can receive tick callbacks by calling ```scrollbywire_addCallback(callback);``` e.g.
 
 ```
-	scrollbywire.addCallback(function(obj){
+	scrollbywire_addCallback(function(obj){
 		// do something with obj.x and obj.y
 		var parallax = obj.y * 0.5;
 	});
